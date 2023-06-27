@@ -10,5 +10,5 @@ cpulimit: "500m"
 memoryrequest: "0.50Gi"
 memorylimit: "1Gi"
 ingresshost: tiotldap.trinitycnetc.com
-pvsize: 3Gi
+pvsize: 2Gi
 volumehandle: fs-00d6ecbbee2c7477d
