@@ -1,0 +1,14 @@
+namespace: dev
+servicename: tiotldap
+commonservicename: tiotldap
+port: 10391
+javaopts: "-Xms256m -Xmx512m"
+image: dockerhub.trinityiot.in/billing/apacheds/2.2.2/apacheds:2.1.1
+initcontainerimage: dockerhub.trinityiot.in/billing/initcontainers/ubuntu:22.04
+cpurequest: "350m"
+cpulimit: "500m"
+memoryrequest: "0.50Gi"
+memorylimit: "1Gi"
+ingresshost: tiotldap.trinitycnetc.com
+pvsize: 2Gi
+volumehandle: fs-00d6ecbbee2c7477d

@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.servicename}}
+  namespace: {{ .Values.namespace}}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+#    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+#    nginx.ingress.kubernetes.io/rewrite-target: /
+#    nginx.ingress.kubernetes.io/affinity: "cookie"
+#    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+#    nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
+  name: {{ .Values.servicename}}
+  namespace: {{ .Values.namespace}}
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.ingresshost}}
+    secretName: tiotidam-secret
+  rules:
+  - host: tiotldap
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: tiotldap
+            port:
+              number: 10391

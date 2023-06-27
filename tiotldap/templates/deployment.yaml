@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.servicename}}
+  namespace: {{ .Values.namespace}}
+  labels:
+    app: {{ .Values.servicename}}
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.servicename}}
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.servicename}}
+        version: v1
+    spec:
+      containers:
+      - name: {{ .Values.servicename}}
+        image: {{ .Values.image}}
+        env:
+        - name: JAVA_OPTS
+          value: {{ .Values.javaopts}}
+        ports:
+        - containerPort: {{ .Values.port}}
+          protocol: TCP
+        volumeMounts:
+        - mountPath: "/opt/apacheds"
+          name: {{ .Values.servicename}}-volume
+#          subPath: "tiotldap"
+        resources:
+          requests:
+            memory: {{ .Values.memoryrequest}}
+            cpu: {{ .Values.cpurequest}}
+          limits:
+            memory: {{ .Values.memorylimit}}
+            cpu: {{ .Values.cpulimit}}
+
+      initContainers:
+      - name: initldap
+        image: {{ .Values.initcontainerimage}}
+        command: ["/bin/bash","-c"]
+        args: ["wget http://dockerhub.trinityiot.in:8081/repository/TRINITYFILES/apacheds/apacheds.zip -O /opt/apacheds.zip && unzip -n /opt/apacheds.zip -d /opt/apacheds"]
+        volumeMounts:
+        - mountPath: "/opt/apacheds"
+          name: {{ .Values.servicename}}-volume
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+      - name: {{ .Values.servicename}}-volume
+        persistentVolumeClaim:
+          claimName: {{ .Values.servicename}}-pvc-claim
