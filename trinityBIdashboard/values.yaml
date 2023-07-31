@@ -1,0 +1,23 @@
+namespace: dev
+servicename: tiotbiconfig
+ingresshost: tiotbiconfig
+dbname: tiotdb
+commonservicename: tiotbiconfig
+ingresshostname: tiotbi
+opts: -Dspring.cloud.vault.scheme=http -Dspring.cloud.vault.host=tiotvault -Dspring.cloud.vault.token=7eb3f197-5d4a-a4d0-ea93-fdac7d3ff1d4 -Dspring.cloud.vault.generic.application-name=Cloud/CONFIGDB/config.json
+javaopts: "-Xms256m -Xmx512m"
+nfsserverip: 192.168.220.106
+nfscapacity: 1Gi
+databaseport: 1433
+databaseip: 192.168.110.109 
+replicas: 1
+jmxport: 28080
+port: 8080
+image: dockerhub.trinityiot.in/billing/trinityanalyst-configurabledashboard/v1.1.0/biconfigdashboardservice
+tag: 1.1.0
+service:
+  port: 80
+cpurequest: "250m"
+cpulimit: "350m"
+memoryrequest: "512Mi"
+memorylimit: "1Gi"

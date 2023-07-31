@@ -1,0 +1,61 @@
+--- 
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: {{ .Values.servicename}}
+  namespace: {{ .Values.namespace}} 
+  labels: 
+    app: {{ .Values.servicename}} 
+    version: v1 
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: {{ .Values.servicename}} 
+      version: v1 
+  template: 
+    metadata: 
+      labels: 
+        app: {{ .Values.servicename}} 
+        version: v1 
+    spec:
+      containers: 
+      - name: {{ .Values.servicename}} 
+        image: {{ .Values.image}}:{{ .Values.tag}}
+        env:
+        - name: JAVA_OPTS
+          value: {{ .Values.javaopts}}
+        ports: 
+        - containerPort: {{ .Values.port}}
+          protocol: TCP 
+          name: peer
+        - containerPort: {{ .Values.jmxport}}
+          protocol: TCP 
+          name: jmx
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.servicename}}-config
+        resources: 
+          requests: 
+            memory: {{ .Values.memoryrequest}} 
+            cpu: {{ .Values.cpurequest}}
+          limits: 
+            memory: {{ .Values.memorylimit}}
+            cpu: {{ .Values.cpulimit}}
+        volumeMounts: 
+#        - mountPath: "/opt/home/MLComposerV2.1.1/AnalytikaServiceLogs.log" 
+#          name: {{ .Values.servicename}}-volume 
+#          subPath: "AnalytikaServiceLogs.log"
+#        - mountPath: "/usr/local/tomcat/lib/"
+#          name: {{ .Values.servicename}}-volume
+#          subPath: "libs/{{ .Values.servicename}}-lib"
+#        - mountPath: "/usr/local/tomcat/lib"
+#          name: {{ .Values.servicename}}-volume
+#          subPath: "lib/slf4j-api-1.7.5.jar
+      imagePullSecrets:
+        - name: regcred
+      volumes: 
+      - name: {{ .Values.servicename}}-volume 
+        persistentVolumeClaim:
+          claimName: {{ .Values.servicename}}-pvc-claim
+

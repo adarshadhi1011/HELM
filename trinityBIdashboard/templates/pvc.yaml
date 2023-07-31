@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.servicename}}-pvc-claim
+  namespace: {{ .Values.namespace}}
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: {{ .Values.servicename}}-nfs-storageclass
+  resources:
+    requests:
+      storage: {{ .Values.nfscapacity}}
+  volumeName: {{ .Values.servicename}}-nfs-pv
